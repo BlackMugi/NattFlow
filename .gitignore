@@ -1,0 +1,15 @@
+# Backend ASP.NET
+bin/
+obj/
+.vs/
+
+# React
+node_modules/
+
+# Env / secrets
+appsettings.Development.json
+appsettings*.json
+
+# OS
+.DS_Store
+Thumbs.db

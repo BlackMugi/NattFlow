@@ -1,0 +1,6 @@
+@NAttFlow_HostAddress = http://localhost:5114
+
+GET {{NAttFlow_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
