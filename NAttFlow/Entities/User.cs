@@ -13,5 +13,8 @@ namespace NattFlow.Entities
     //Many to one
      public int IdRole {get; set;}
      public Role Role {get; set;} = null!;
+ public ICollection<Paiement> Paiements { get; set; } = new List<Paiement>();
+public ICollection<Notification> Notifications { get; set; } = new List<Notification>();
   }
 }
+
