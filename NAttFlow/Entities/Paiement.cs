@@ -10,6 +10,6 @@ namespace NattFlow.Entities
         public int IdCotisation { get; set; }
         public Cotisation Cotisation { get; set; } = null!;
         public int IdUser { get; set; }
-        public User User { get; set; } = null!
+        public User User { get; set; } = null!;
     }
 }
