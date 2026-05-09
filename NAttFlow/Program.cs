@@ -45,8 +45,17 @@ builder.Services.AddAuthorization();
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
+
+
+builder.Services.AddScoped<ICotisationRepository, CotisationRepository>();
+builder.Services.AddScoped<IPaiementRepository, PaiementRepository>();
+builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+builder.Services.AddScoped<ICotisationService, CotisationService>();
+builder.Services.AddScoped<IPaiementService, PaiementService>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
 // Add services to the container.
 builder.Services.AddControllers();
 
