@@ -38,6 +38,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                                            Encoding.UTF8.GetBytes(jwtSettings["Secret"]!))
         };
     });
+    
 
 
 builder.Services.AddAuthorization();
@@ -56,6 +57,16 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+
+//Injection de notre Super Admin
+using (var scope = app.Services.CreateScope())
+{
+    var db     = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    var config = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+    db.Database.Migrate();                              
+    await SeedData.SeedSuperAdminAsync(db, config);    
+}
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -65,6 +76,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseMiddleware<ErrorHandlingMiddleware>();
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
