@@ -14,7 +14,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Accueil />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/suivis-du-status" element={<ProtectedRoute><SuivisStatus /></ProtectedRoute>}/>
+        <Route path="/suivis-du-status" element={<SuivisStatus />}/>
+       <Route path="/suivis-du-status" element={<ProtectedRoute><SuivisStatus /></ProtectedRoute>}/>
         <Route path="/mes-paiements" element={<ProtectedRoute><Paiement /></ProtectedRoute>}/>
         <Route path="/profil" element={<ProtectedRoute><Profil /></ProtectedRoute>}/>
       </Routes>
