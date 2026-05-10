@@ -15,19 +15,26 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+
+        {/* Login seul, sans navbar */}
         <Route path="/login" element={<LoginPage />} />
 
-        {/**Routes Public */}
+        {/* Routes avec Navbar */}
         <Route element={<MainLayout />}>
+
+          {/* Publiques */}
           <Route path="/" element={<Accueil />} />
+
+          {/* Authentifiées */}
           <Route element={<AuthRoute />}>
             <Route path="/suivis-du-status" element={<SuivisStatus />} />
             <Route path="/mes-paiements" element={<Paiement />} />
             <Route path="/profil" element={<Profil />} />
           </Route>
+
         </Route>
 
-        {/**Routes admin*/}
+        {/* Routes admin (sidebar, sans Navbar) */}
         <Route element={<AdminRoute />}>
           <Route element={<AdminLayout />}>
             <Route path="/admin" element={<Dashboard />} />

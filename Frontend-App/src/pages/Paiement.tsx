@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { CreditCard, CheckCircle, Clock, AlertCircle } from 'lucide-react';
 
+
 const paiements = [
   { id: 1, mois: 'Janvier 2026', montant: 5000, method: 'Mobile Money', statut: 'Payé', date: '05/01/2026' },
   { id: 2, mois: 'Février 2026', montant: 5000, method: 'Espèces', statut: 'Payé', date: '03/02/2026' },
@@ -21,6 +22,7 @@ function Paiement() {
 
   return (
     <div className="bg-[#0d0d0d] min-h-screen">
+
       <div className="max-w-4xl mx-auto px-6 pt-28 pb-16">
 
         <motion.h1
