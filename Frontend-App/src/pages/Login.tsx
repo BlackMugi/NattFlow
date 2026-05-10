@@ -35,12 +35,11 @@ function LoginPage() {
       <div className="flex shadow-[4px_4px_4px_rgba(0,0,0,0.25)] rounded-xl overflow-hidden w-[90vw] max-w-225">
 
         {/* Partie formulaire */}
-        <div className="bg-[#dbdbdb] flex flex-col p-6 sm:p-8 w-[50%] min-w-70 rounded-tl-xl rounded-bl-xl">
+        <div className="bg-[#c4c4c4] flex flex-col p-6 sm:p-8 w-[50%] min-w-70 rounded-tl-xl rounded-bl-xl">
           
           <div className="flex items-center mb-6">
             <img src={Logo} alt="Logo NattFlow" className="h-10" />
-            <span className="font-['Poppins',sans-serif] text-[21px] font-extrabold text-[#0d0d0d] tracking-[-0.5px]">
-              {/* ↑ text-white → text-[#0d0d0d] sinon invisible sur fond gris */}
+            <span className="font-['Poppins',sans-serif] text-[21px] font-extrabold text-white tracking-[-0.5px]">
               Natt<span className="text-[#ff7200]">Flow</span>
             </span>
           </div>
@@ -48,7 +47,7 @@ function LoginPage() {
           <h1 className="text-2xl sm:text-3xl font-semibold font-['Barlow_Condensed'] mb-2">
             Bienvenue !
           </h1>
-          <p className="text-sm sm:text-base text-[#999999] mb-6">
+          <p className="text-sm sm:text-base text-black mb-6">
             Connectez-vous pour accéder à votre espace de travail
           </p>
 
@@ -56,7 +55,7 @@ function LoginPage() {
             {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
 
             <label className="flex flex-col mb-4">
-              <span className="flex items-center gap-2 text-[#666666] text-sm">
+              <span className="flex items-center gap-2 text-black text-sm">
                 <Mail size={16} /> Email
               </span>
               <input
@@ -64,13 +63,13 @@ function LoginPage() {
                 placeholder="exemple@nattflow.sn"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="mt-1 px-3 py-2 border border-[#AEAEAE] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                className="mt-1 px-3 py-2 border border-[#1c1c1c33] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
                 required
               />
             </label>
 
             <label className="flex flex-col mb-4">
-              <span className="flex items-center gap-2 text-[#666666] text-sm">
+              <span className="flex items-center gap-2 text-black text-sm">
                 <Lock size={16} /> Mot de passe
               </span>
               <div className="mt-1 relative">
@@ -79,13 +78,13 @@ function LoginPage() {
                   placeholder="********"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-3 py-2 border border-[#AEAEAE] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                  className="w-full px-3 py-2 border border-[#1c1c1c33] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#999999]"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-black"
                 >
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
@@ -94,7 +93,7 @@ function LoginPage() {
 
             <div className="flex justify-between items-center mb-6 text-sm">
               <label className="flex items-center gap-2">
-                <input type="checkbox" className="w-4 h-4 border border-[#AEAEAE]" />
+                <input type="checkbox" className="w-4 h-4 border border-[#1c1c1c33]" />
                 Se souvenir de moi
               </label>
               <span className="text-[#ff7400] font-semibold cursor-pointer">

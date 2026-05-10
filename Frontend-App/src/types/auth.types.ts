@@ -1,16 +1,19 @@
+export interface LoginRequestDTO {
+  email: string;
+  password: string;
+}
+
 export interface AuthResponseDTO {
   token: string;
-  userId: number;
   email: string;
   prenom: string;
   role: string;
+  expirationToken: string;
 }
 
-
 export interface StoredUser {
-  id: number;
-  prenom: string;
-  nom: string;
   email: string;
-  role: { id: number; nomRole: string };
+  prenom: string;
+  role: { nomRole: string };
+  expirationToken: string;
 }
