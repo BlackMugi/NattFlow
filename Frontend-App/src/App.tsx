@@ -10,6 +10,7 @@ import Paiement from './pages/Paiement';
 import Profil from './pages/Profil';
 import LoginPage from './pages/Login';
 import Dashboard from './pages/admin/Dashboard';
+import Utilisateurs from './pages/admin/Utilisateurs';
 
 function App() {
   return (
@@ -38,7 +39,7 @@ function App() {
         <Route element={<AdminRoute />}>
           <Route element={<AdminLayout />}>
             <Route path="/admin" element={<Dashboard />} />
-            {/* <Route path="/admin/utilisateurs" element={<Utilisateurs />} /> */}
+            <Route path="/admin/utilisateurs" element={<Utilisateurs />} />
             {/* <Route path="/admin/cotisations"  element={<Cotisations />} />  */}
             {/* <Route path="/admin/paiements"    element={<AdminPaiements />} />  */}
             {/* <Route path="/admin/notifications" element={<Notifications />} /> */}

@@ -9,6 +9,7 @@ namespace NattFlow.Services.Implementations;
 
 public class UserService(IUserRepository userRepo) : IUserService
 {
+    //Pagination
     public async Task<PaginationDTO<UserResponseDTO>> GetAllAsync(int page, int pageSize)
     {
         var (items, total) = await userRepo.GetAllAsync(page, pageSize);
@@ -49,7 +50,7 @@ public class UserService(IUserRepository userRepo) : IUserService
         return await GetByIdAsync(created.IdUser);
     }
 
-    public async Task<UserResponseDTO> UpdateAsync(int id, UserCreateDTO dto)
+    public async Task<UserResponseDTO> UpdateAsync(int id, UserUpdateDTO dto)
     {
         var user = await userRepo.GetByIdAsync(id)
             ?? throw new NotFoundException($"Utilisateur {id} introuvable.");

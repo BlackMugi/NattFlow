@@ -18,6 +18,16 @@ export interface UserCreateDTO {
   idRole: number;
 }
 
+export interface UserUpdateDTO {
+  email: string;
+  password?: string;
+  nom: string;
+  prenom: string;
+  telephone: string;
+  addresse: string;
+  idRole: number;
+}
+
 export interface PaginationDTO<T> {
   data: T[];
   page: number;

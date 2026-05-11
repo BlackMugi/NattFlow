@@ -1,6 +1,6 @@
 import { API } from '../constants/api';
 import axiosInstance from './axiosInstance';
-import type { PaginationDTO, UserCreateDTO, UserResponseDTO } from '../types/user.types';
+import type { PaginationDTO, UserCreateDTO, UserUpdateDTO, UserResponseDTO } from '../types/user.types';
 
 export const getAllUsers = async (
   page = 1,
@@ -22,8 +22,12 @@ export const createUser = async (dto: UserCreateDTO): Promise<UserResponseDTO> =
   return data;
 };
 
-export const updateUser = async (id: number, dto: UserCreateDTO): Promise<UserResponseDTO> => {
-  const { data } = await axiosInstance.put<UserResponseDTO>(API.users.update(id), dto);
+export const updateUser = async (id: number, dto: UserUpdateDTO): Promise<UserResponseDTO> => {
+  const payload = {
+    ...dto,
+    password: dto.password?.trim() || null,
+  };
+  const { data } = await axiosInstance.put<UserResponseDTO>(API.users.update(id), payload);
   return data;
 };
 

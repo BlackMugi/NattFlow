@@ -10,15 +10,19 @@ namespace NattFlow.Controllers;
 [Authorize]
 public class UsersController(IUserService userService) : ControllerBase
 {
+
+    //Get
     [HttpGet]
     [Authorize(Roles = "ADMIN")]
     public async Task<IActionResult> GetAll([FromQuery] int page = 1, [FromQuery] int pageSize = 20)
         => Ok(await userService.GetAllAsync(page, pageSize));
 
+    // Get {id}
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
         => Ok(await userService.GetByIdAsync(id));
 
+    //Post
     [HttpPost]
     [Authorize(Roles = "ADMIN")]
     public async Task<IActionResult> Create([FromBody] UserCreateDTO dto)
@@ -27,11 +31,17 @@ public class UsersController(IUserService userService) : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = created.IdUser }, created);
     }
 
+    //Put
     [HttpPut("{id}")]
     [Authorize(Roles = "ADMIN")]
-    public async Task<IActionResult> Update(int id, [FromBody] UserCreateDTO dto)
-        => Ok(await userService.UpdateAsync(id, dto));
+    public async Task<IActionResult> Update(int id, [FromBody] UserUpdateDTO dto)
+    { 
+        return Ok(await userService.UpdateAsync(id, dto));
+    }
+       
 
+
+    //Delete
     [HttpDelete("{id}")]
     [Authorize(Roles = "ADMIN")]
     public async Task<IActionResult> Delete(int id)

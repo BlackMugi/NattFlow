@@ -45,4 +45,7 @@ public class UserRepository(AppDbContext context) : IUserRepository
         context.Users.Remove(user);
         await context.SaveChangesAsync();
     }
+
+    public async Task<IEnumerable<int>> GetAllIdsAsync() =>
+    await context.Users.Select(u => u.IdUser).ToListAsync();
 }

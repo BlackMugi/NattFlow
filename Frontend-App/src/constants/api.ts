@@ -12,4 +12,9 @@ export const API = {
     update: (id: number) => `${BASE}/users/${id}`,
     delete: (id: number) => `${BASE}/users/${id}`,
   },
+  roles: {
+    getAll: `${BASE}/roles`,
+    create: `${BASE}/roles`,
+    delete: (id: number) => `${BASE}/roles/${id}`,
+  },
 } as const;

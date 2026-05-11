@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from './axiosInstance';
 import { API } from '../constants/api';
 import type { AuthResponseDTO, LoginRequestDTO, StoredUser } from '../types/auth.types';
 

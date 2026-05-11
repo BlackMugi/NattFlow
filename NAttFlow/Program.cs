@@ -47,17 +47,14 @@ builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
-
-<<<<<<< HEAD
-=======
-
+builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<ICotisationRepository, CotisationRepository>();
 builder.Services.AddScoped<IPaiementRepository, PaiementRepository>();
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddScoped<ICotisationService, CotisationService>();
 builder.Services.AddScoped<IPaiementService, PaiementService>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
->>>>>>> ea4b27eed6173a5e4d1963fcae5e6fb01a4a580c
+
 // Add services to the container.
 builder.Services.AddControllers();
 

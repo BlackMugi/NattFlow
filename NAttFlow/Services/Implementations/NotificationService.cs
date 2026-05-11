@@ -6,7 +6,10 @@ using NattFlow.Services.Interfaces;
 
 namespace NattFlow.Services.Implementations
 {
-    public class NotificationService(INotificationRepository notificationRepo) : INotificationService
+    public class NotificationService(
+        INotificationRepository notificationRepo,
+        IUserRepository userRepo
+    ) : INotificationService
     {
         public async Task<IEnumerable<NotificationResponseDTO>> GetAllAsync()
         {
@@ -68,5 +71,23 @@ namespace NattFlow.Services.Implementations
             NomUser = n.User?.Nom ?? "",
             PrenomUser = n.User?.Prenom ?? ""
         };
+
+         public async Task BroadcastAsync(BroadcastNotificationDTO dto)
+        {
+            var userIds = await userRepo.GetAllIdsAsync();
+
+            var notifications = userIds.Select(idUser => new Notification
+            {
+                Type         = dto.Type,
+                Titre        = dto.Titre,
+                Message      = dto.Message,
+                IdUser       = idUser,
+                Lu           = false,
+                DateCreation = DateTime.UtcNow
+            });
+
+            foreach (var notif in notifications)
+                await notificationRepo.CreateAsync(notif);
+        }
     }
 }
