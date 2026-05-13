@@ -10,7 +10,7 @@ export interface UserResponseDTO {
 
 export interface UserCreateDTO {
   email: string;
-  password: string;
+    password?: string;
   nom: string;
   prenom: string;
   telephone: string;
@@ -28,9 +28,3 @@ export interface UserUpdateDTO {
   idRole: number;
 }
 
-export interface PaginationDTO<T> {
-  data: T[];
-  page: number;
-  pageSize: number;
-  totalCount: number;
-}

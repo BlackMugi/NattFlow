@@ -8,6 +8,7 @@ export const login = async (email: string, password: string): Promise<StoredUser
   const { data } = await axios.post<AuthResponseDTO>(API.auth.login, payload);
 
   const user: StoredUser = {
+    idUser: data.idUser,
     email: data.email,
     prenom: data.prenom,
     role: { nomRole: data.role },

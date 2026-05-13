@@ -8,17 +8,29 @@ namespace NattFlow.Repositories.Implementations
 {
     public class NotificationRepository(AppDbContext context) : INotificationRepository
     {
-        public async Task<IEnumerable<Notification>> GetAllAsync() =>
-            await context.Notifications
-                .Include(n => n.User)
-                .AsNoTracking()
+        public async Task<(IEnumerable<Notification> Items, int Total)> GetAllAsync(int page, int pageSize)
+        {
+            var query = context.Notifications.Include(n => n.User).AsNoTracking();
+            var total = await query.CountAsync();
+            var items = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
+            return (items, total);
+        }
 
-        public async Task<IEnumerable<Notification>> GetByUserIdAsync(int idUser) =>
-            await context.Notifications
+        public async Task<(IEnumerable<Notification> Items, int Total)> GetByUserIdAsync(int idUser, int page, int pageSize)
+        {
+            var query = context.Notifications
                 .Where(n => n.IdUser == idUser)
-                .AsNoTracking()
+                .AsNoTracking();
+            var total = await query.CountAsync();
+            var items = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
+            return (items, total);
+        }
 
         public async Task<Notification?> GetByIdAsync(int id) =>
             await context.Notifications

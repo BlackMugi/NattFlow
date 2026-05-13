@@ -13,9 +13,8 @@ namespace NattFlow.Controllers
         //Get
         [HttpGet]
         [Authorize(Roles = "ADMIN")]
-        public async Task<IActionResult> GetAll()
-            => Ok(await notificationService.GetAllAsync());
-
+        public async Task<IActionResult> GetAll([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+            => Ok(await notificationService.GetAllAsync(page, pageSize));
         //Get{id}
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
@@ -23,8 +22,8 @@ namespace NattFlow.Controllers
 
         //Get(user/{idUser})
         [HttpGet("user/{idUser}")]
-        public async Task<IActionResult> GetByUserId(int idUser)
-            => Ok(await notificationService.GetByUserIdAsync(idUser));
+        public async Task<IActionResult> GetByUserId(int idUser, [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+            => Ok(await notificationService.GetByUserIdAsync(idUser, page, pageSize));
 
 
         //Post

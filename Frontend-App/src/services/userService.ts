@@ -1,6 +1,7 @@
 import { API } from '../constants/api';
 import axiosInstance from './axiosInstance';
-import type { PaginationDTO, UserCreateDTO, UserUpdateDTO, UserResponseDTO } from '../types/user.types';
+import type { UserCreateDTO, UserUpdateDTO, UserResponseDTO } from '../types/user.types';
+import type { PaginationDTO } from '../types/pagination.type';
 
 export const getAllUsers = async (
   page = 1,

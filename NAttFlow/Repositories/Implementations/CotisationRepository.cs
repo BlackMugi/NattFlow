@@ -8,8 +8,16 @@ namespace NattFlow.Repositories.Implementations
 {
     public class CotisationRepository(AppDbContext context) : ICotisationRepository
     {
-        public async Task<IEnumerable<Cotisation>> GetAllAsync() =>
-            await context.Cotisations.AsNoTracking().ToListAsync();
+        public async Task<(IEnumerable<Cotisation> Items, int Total)> GetAllAsync(int page, int pageSize)
+        {
+            var query = context.Cotisations.AsNoTracking();
+            var total = await query.CountAsync();
+            var items = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+            return (items, total);
+        }
 
         public async Task<Cotisation?> GetByIdAsync(int id) =>
             await context.Cotisations.FindAsync(id);

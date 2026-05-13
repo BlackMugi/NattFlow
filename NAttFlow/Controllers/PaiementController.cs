@@ -13,8 +13,8 @@ namespace NattFlow.Controllers
         //Get
         [HttpGet]
         [Authorize(Roles = "ADMIN")]
-        public async Task<IActionResult> GetAll()
-            => Ok(await paiementService.GetAllAsync());
+        public async Task<IActionResult> GetAll([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+            => Ok(await paiementService.GetAllAsync(page, pageSize));
 
         //Get{id}
         [HttpGet("{id}")]
@@ -23,15 +23,15 @@ namespace NattFlow.Controllers
 
         //Get(user/{idUser})
         [HttpGet("user/{idUser}")]
-        public async Task<IActionResult> GetByUserId(int idUser)
-            => Ok(await paiementService.GetByUserIdAsync(idUser));
+        public async Task<IActionResult> GetByUserId(int idUser, [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+            => Ok(await paiementService.GetByUserIdAsync(idUser, page, pageSize));
+
 
         //Get(cotisation/{idCotisation})
         [HttpGet("cotisation/{idCotisation}")]
         [Authorize(Roles = "ADMIN")]
-        public async Task<IActionResult> GetByCotisationId(int idCotisation)
-            => Ok(await paiementService.GetByCotisationIdAsync(idCotisation));
-
+        public async Task<IActionResult> GetByCotisationId(int idCotisation, [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+            => Ok(await paiementService.GetByCotisationIdAsync(idCotisation, page, pageSize));
         //Membre initie un paiement
         [HttpPost("initier")]
         public async Task<IActionResult> Initier([FromBody] PaiementInitierDTO dto)

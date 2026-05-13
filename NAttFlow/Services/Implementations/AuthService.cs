@@ -20,6 +20,7 @@ public class AuthService(IUserRepository userRepo, IJwtService jwtService) : IAu
 
         return new AuthResponseDTO
         {
+            IdUser = user.IdUser,
             Token = token,
             Email = user.Email,
             Prenom = user.Prenom,

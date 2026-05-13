@@ -1,105 +1,85 @@
-import { motion } from 'framer-motion';
-import { CreditCard, CheckCircle, Clock, AlertCircle } from 'lucide-react';
+import { STATUT_PAIEMENT } from '../constants/paiement.constants';
+import { usePaiement } from '../hooks/usePaiement';
+import { PaiementModal } from '../components/paiement/PaiementModal';
+import { CotisationDuMois } from '../components/paiement/CotisationDuMois';
+import { CotisationList } from '../components/paiement/CotisationList';
 
-
-const paiements = [
-  { id: 1, mois: 'Janvier 2026', montant: 5000, method: 'Mobile Money', statut: 'Payé', date: '05/01/2026' },
-  { id: 2, mois: 'Février 2026', montant: 5000, method: 'Espèces', statut: 'Payé', date: '03/02/2026' },
-  { id: 3, mois: 'Mars 2026', montant: 5000, method: '-', statut: 'En attente', date: '-' },
-  { id: 4, mois: 'Avril 2026', montant: 5000, method: '-', statut: 'En retard', date: '-' },
-];
-
-function getStatutStyle(statut: string) {
-  if (statut === 'Payé') return { color: '#22c55e', icon: <CheckCircle size={16} /> };
-  if (statut === 'En attente') return { color: '#f59e0b', icon: <Clock size={16} /> };
-  return { color: '#ef4444', icon: <AlertCircle size={16} /> };
-}
-
-function Paiement() {
-  const totalPaye = paiements
-    .filter(p => p.statut === 'Payé')
-    .reduce((acc, p) => acc + p.montant, 0);
+export default function Paiement() {
+  const {
+    cotisations, loading,
+    modal, setModal, closeModal,
+    method, setMethod,
+    payLoading, payError, paySuccess,
+    totalVerse, cotisationDuMois, paiementDuMois,
+    getPaiementPourCotisation, handlePayer,
+  } = usePaiement();
 
   return (
-    <div className="bg-[#0d0d0d] min-h-screen">
+    <div className="max-w-4xl mx-auto px-4 py-8">
 
-      <div className="max-w-4xl mx-auto px-6 pt-28 pb-16">
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold text-[#0d0d0d]">Mes Paiements</h1>
+        <p className="text-sm text-gray-500">Gérez vos cotisations et suivez vos versements</p>
+      </div>
 
-        <motion.h1
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-3xl font-extrabold text-white mb-2"
-        >
-          Mes <span className="text-[#ff7200]">Paiements</span>
-        </motion.h1>
-
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-gray-400 mb-10"
-        >
-          Historique complet de vos paiements de cotisations.
-        </motion.p>
-
-        {/* RESUME */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
-          {[
-            { label: 'Total paiements', valeur: paiements.length, color: '#ff7200' },
-            { label: 'Montant payé', valeur: `${totalPaye.toLocaleString()} FCFA`, color: '#22c55e' },
-            { label: 'En attente / retard', valeur: paiements.filter(p => p.statut !== 'Payé').length, color: '#ef4444' },
-          ].map((item, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: i * 0.15 }}
-              className="bg-[#111111] rounded-2xl p-6 border border-gray-800"
-            >
-              <p className="text-gray-400 text-sm mb-1">{item.label}</p>
-              <p className="text-2xl font-extrabold" style={{ color: item.color }}>
-                {item.valeur}
-              </p>
-            </motion.div>
-          ))}
+      {/* Stats */}
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-8">
+        <div className="bg-[#0d0d0d] rounded-xl px-5 py-4">
+          <p className="text-white/40 text-xs uppercase mb-1">Total à versé</p>
+          <p className="text-white text-xl font-bold">{totalVerse.toLocaleString('fr-FR')} FCFA</p>
         </div>
-
-        {/* LISTE PAIEMENTS */}
-        <div className="flex flex-col gap-4">
-          {paiements.map((p, i) => {
-            const style = getStatutStyle(p.statut);
-            return (
-              <motion.div
-                key={p.id}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.4, delay: 0.3 + i * 0.1 }}
-                className="bg-[#111111] rounded-2xl p-6 border border-gray-800 hover:border-[#ff7200] transition flex items-center justify-between"
-              >
-                <div className="flex items-center gap-4">
-                  <div className="bg-[#1a1a1a] p-3 rounded-xl">
-                    <CreditCard size={24} className="text-[#ff7200]" />
-                  </div>
-                  <div>
-                    <p className="text-white font-bold">{p.mois}</p>
-                    <p className="text-gray-400 text-sm">{p.method} · {p.date}</p>
-                  </div>
-                </div>
-
-                <div className="text-right">
-                  <p className="text-white font-bold">{p.montant.toLocaleString()} FCFA</p>
-                  <span className="flex items-center gap-1 text-sm font-semibold justify-end mt-1" style={{ color: style.color }}>
-                    {style.icon} {p.statut}
-                  </span>
-                </div>
-              </motion.div>
-            );
-          })}
+        <div className="bg-white rounded-xl border border-gray-100 shadow-sm px-5 py-4">
+          <p className="text-gray-400 text-xs uppercase mb-1">Cotisations</p>
+          <p className="text-[#0d0d0d] text-xl font-bold">{cotisations.length}</p>
+        </div>
+        <div className={`rounded-xl px-5 py-4 border ${
+          paiementDuMois?.statut === STATUT_PAIEMENT.VALIDE     ? 'bg-green-50 border-green-100'  :
+          paiementDuMois?.statut === STATUT_PAIEMENT.EN_ATTENTE ? 'bg-yellow-50 border-yellow-100' :
+          'bg-[#ff7200]/5 border-[#ff7200]/20'
+        }`}>
+          <p className="text-gray-400 text-xs uppercase mb-1">Mois en cours</p>
+          <p className={`text-sm font-bold capitalize ${
+            paiementDuMois?.statut === STATUT_PAIEMENT.VALIDE     ? 'text-green-600'  :
+            paiementDuMois?.statut === STATUT_PAIEMENT.EN_ATTENTE ? 'text-yellow-600' :
+            'text-[#ff7200]'
+          }`}>
+            {paiementDuMois?.statut === STATUT_PAIEMENT.VALIDE     ? '✓ Payé'        :
+             paiementDuMois?.statut === STATUT_PAIEMENT.EN_ATTENTE ? '⏳ En attente' :
+             cotisationDuMois ? '⚠ À payer' : 'Aucune cotisation'}
+          </p>
         </div>
       </div>
+
+      {cotisationDuMois && (
+        <CotisationDuMois
+          cotisation={cotisationDuMois}
+          paiement={paiementDuMois}
+          onPayer={c => setModal({ cotisation: c })}
+        />
+      )}
+
+      <h2 className="text-base font-bold text-[#0d0d0d] mb-3">Toutes les cotisations</h2>
+      <CotisationList
+        cotisations={cotisations}
+        loading={loading}
+        idCotisationMoisCourant={cotisationDuMois?.idCotisation}
+        getPaiement={getPaiementPourCotisation}
+        onPayer={c => setModal({ cotisation: c })}
+      />
+
+      {modal && (
+        <PaiementModal
+          libelle={modal.cotisation.libelle}
+          montant={modal.cotisation.montant}
+          method={method}
+          payLoading={payLoading}
+          payError={payError}
+          paySuccess={paySuccess}
+          onClose={closeModal}
+          onSubmit={handlePayer}
+          onMethod={setMethod}
+        />
+      )}
     </div>
   );
 }
-
-export default Paiement;

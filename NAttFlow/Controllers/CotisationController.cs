@@ -11,8 +11,8 @@ namespace NattFlow.Controllers
     public class CotisationController(ICotisationService cotisationService) : ControllerBase
     {
         [HttpGet]
-        public async Task<IActionResult> GetAll()
-            => Ok(await cotisationService.GetAllAsync());
+        public async Task<IActionResult> GetAll([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+            => Ok(await cotisationService.GetAllAsync(page, pageSize));
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)

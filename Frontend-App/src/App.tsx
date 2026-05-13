@@ -7,10 +7,14 @@ import { MainLayout } from './components/layout/MainLayout';
 import Accueil from './pages/Accueil';
 import SuivisStatus from './pages/SuivisStatus';
 import Paiement from './pages/Paiement';
-import Profil from './pages/Profil';
 import LoginPage from './pages/Login';
 import Dashboard from './pages/admin/Dashboard';
 import Utilisateurs from './pages/admin/Utilisateurs';
+import Cotisations from './pages/admin/Cotisations';
+import AdminPaiements from './pages/admin/AdminPaiements';
+import Notifications from './pages/admin/Notifications';
+import MesNotifications from './pages/MesNotifications';
+import NotificationDetail from './pages/NotificationDetail';
 
 function App() {
   return (
@@ -30,7 +34,8 @@ function App() {
           <Route element={<AuthRoute />}>
             <Route path="/suivis-du-status" element={<SuivisStatus />} />
             <Route path="/mes-paiements" element={<Paiement />} />
-            <Route path="/profil" element={<Profil />} />
+            <Route path="/mes-notifications" element={<MesNotifications />} />
+            <Route path="/mes-notifications/:id" element={<NotificationDetail />} />
           </Route>
 
         </Route>
@@ -40,9 +45,9 @@ function App() {
           <Route element={<AdminLayout />}>
             <Route path="/admin" element={<Dashboard />} />
             <Route path="/admin/utilisateurs" element={<Utilisateurs />} />
-            {/* <Route path="/admin/cotisations"  element={<Cotisations />} />  */}
-            {/* <Route path="/admin/paiements"    element={<AdminPaiements />} />  */}
-            {/* <Route path="/admin/notifications" element={<Notifications />} /> */}
+            <Route path="/admin/cotisations"  element={<Cotisations />} />
+            <Route path="/admin/paiements"    element={<AdminPaiements />} /> 
+            <Route path="/admin/notifications" element={<Notifications />} />
           </Route>
         </Route>
 

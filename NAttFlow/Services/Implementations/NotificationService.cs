@@ -1,3 +1,4 @@
+using NattFlow.DTOs.Common;
 using NattFlow.DTOs.Notification;
 using NattFlow.Entities;
 using NattFlow.Exceptions;
@@ -11,16 +12,28 @@ namespace NattFlow.Services.Implementations
         IUserRepository userRepo
     ) : INotificationService
     {
-        public async Task<IEnumerable<NotificationResponseDTO>> GetAllAsync()
+        public async Task<PaginationDTO<NotificationResponseDTO>> GetAllAsync(int page, int pageSize)
         {
-            var notifications = await notificationRepo.GetAllAsync();
-            return notifications.Select(n => ToDTO(n));
+            var (items, total) = await notificationRepo.GetAllAsync(page, pageSize);
+            return new PaginationDTO<NotificationResponseDTO>
+            {
+                Data       = items.Select(ToDTO),
+                Page       = page,
+                PageSize   = pageSize,
+                TotalCount = total
+            };
         }
 
-        public async Task<IEnumerable<NotificationResponseDTO>> GetByUserIdAsync(int idUser)
+        public async Task<PaginationDTO<NotificationResponseDTO>> GetByUserIdAsync(int idUser, int page, int pageSize)
         {
-            var notifications = await notificationRepo.GetByUserIdAsync(idUser);
-            return notifications.Select(n => ToDTO(n));
+            var (items, total) = await notificationRepo.GetByUserIdAsync(idUser, page, pageSize);
+            return new PaginationDTO<NotificationResponseDTO>
+            {
+                Data       = items.Select(ToDTO),
+                Page       = page,
+                PageSize   = pageSize,
+                TotalCount = total
+            };
         }
 
         public async Task<NotificationResponseDTO> GetByIdAsync(int id)
@@ -34,11 +47,11 @@ namespace NattFlow.Services.Implementations
         {
             var notification = new Notification
             {
-                Type = dto.Type,
-                Titre = dto.Titre,
-                Message = dto.Message,
-                IdUser = dto.IdUser,
-                Lu = false,
+                Type         = dto.Type,
+                Titre        = dto.Titre,
+                Message      = dto.Message,
+                IdUser       = dto.IdUser,
+                Lu           = false,
                 DateCreation = DateTime.UtcNow
             };
             var created = await notificationRepo.CreateAsync(notification);
@@ -54,40 +67,34 @@ namespace NattFlow.Services.Implementations
             return ToDTO(updated);
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(int id) => await notificationRepo.DeleteAsync(id);
+
+        public async Task BroadcastAsync(BroadcastNotificationDTO dto)
         {
-            await notificationRepo.DeleteAsync(id);
+            var userIds = await userRepo.GetAllIdsAsync();
+            foreach (var idUser in userIds)
+                await notificationRepo.CreateAsync(new Notification
+                {
+                    Type         = dto.Type,
+                    Titre        = dto.Titre,
+                    Message      = dto.Message,
+                    IdUser       = idUser,
+                    Lu           = false,
+                    DateCreation = DateTime.UtcNow
+                });
         }
 
         private static NotificationResponseDTO ToDTO(Notification n) => new()
         {
             IdNotification = n.IdNotification,
-            Type = n.Type,
-            Titre = n.Titre,
-            Message = n.Message,
-            Lu = n.Lu,
-            DateCreation = n.DateCreation,
-            IdUser = n.IdUser,
-            NomUser = n.User?.Nom ?? "",
-            PrenomUser = n.User?.Prenom ?? ""
+            Type           = n.Type,
+            Titre          = n.Titre,
+            Message        = n.Message,
+            Lu             = n.Lu,
+            DateCreation   = n.DateCreation,
+            IdUser         = n.IdUser,
+            NomUser        = n.User?.Nom ?? "",
+            PrenomUser     = n.User?.Prenom ?? ""
         };
-
-         public async Task BroadcastAsync(BroadcastNotificationDTO dto)
-        {
-            var userIds = await userRepo.GetAllIdsAsync();
-
-            var notifications = userIds.Select(idUser => new Notification
-            {
-                Type         = dto.Type,
-                Titre        = dto.Titre,
-                Message      = dto.Message,
-                IdUser       = idUser,
-                Lu           = false,
-                DateCreation = DateTime.UtcNow
-            });
-
-            foreach (var notif in notifications)
-                await notificationRepo.CreateAsync(notif);
-        }
     }
 }

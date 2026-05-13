@@ -4,6 +4,7 @@ export interface LoginRequestDTO {
 }
 
 export interface AuthResponseDTO {
+  idUser: number;
   token: string;
   email: string;
   prenom: string;
@@ -12,6 +13,7 @@ export interface AuthResponseDTO {
 }
 
 export interface StoredUser {
+  idUser: number;
   email: string;
   prenom: string;
   role: { nomRole: string };

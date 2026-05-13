@@ -14,7 +14,7 @@ public class UsersController(IUserService userService) : ControllerBase
     //Get
     [HttpGet]
     [Authorize(Roles = "ADMIN")]
-    public async Task<IActionResult> GetAll([FromQuery] int page = 1, [FromQuery] int pageSize = 20)
+    public async Task<IActionResult> GetAll([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
         => Ok(await userService.GetAllAsync(page, pageSize));
 
     // Get {id}

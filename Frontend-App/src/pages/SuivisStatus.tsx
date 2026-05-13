@@ -1,116 +1,81 @@
-import { motion } from 'framer-motion';
-import { CheckCircle, Clock, AlertCircle } from 'lucide-react';
+import { useSuivisStatus } from '../hooks/useSuivisStatus';
+import { StatutIcon } from '../components/suivis/StatutIcon';
+import { StatutBadge } from '../components/suivis/StatutBadge';
+import { formatDateFr } from '../utils/dateUtils';
+import { FILTRES, FILTRE_LABELS } from '../constants/paiement.constants';
 
-const cotisations = [
-  { mois: 'Janvier 2026', montant: 5000, statut: 'Payé', date: '05/01/2026' },
-  { mois: 'Février 2026', montant: 5000, statut: 'Payé', date: '03/02/2026' },
-  { mois: 'Mars 2026', montant: 5000, statut: 'En attente', date: '-' },
-  { mois: 'Avril 2026', montant: 5000, statut: 'En retard', date: '-' },
-  { mois: 'Mai 2026', montant: 5000, statut: 'En attente', date: '-' },
-];
-
-function getStatutStyle(statut: string) {
-  if (statut === 'Payé') return { color: '#22c55e', icon: <CheckCircle size={16} /> };
-  if (statut === 'En attente') return { color: '#f59e0b', icon: <Clock size={16} /> };
-  return { color: '#ef4444', icon: <AlertCircle size={16} /> };
-}
-
-function SuivisStatus() {
-  const payees = cotisations.filter(c => c.statut === 'Payé').length;
-  const total = cotisations.length;
+export default function SuivisStatus() {
+  const { loading, filtre, setFiltre, paiementsFiltres, stats } = useSuivisStatus();
 
   return (
-    <div className="bg-[#0d0d0d] min-h-screen">
-      <div className="max-w-4xl mx-auto px-6 pt-28 pb-16">
+    <div className="max-w-4xl mx-auto px-4 py-8">
 
-        <motion.h1
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-3xl font-extrabold text-white mb-2"
-        >
-          Suivi du <span className="text-[#ff7200]">statut</span>
-        </motion.h1>
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold text-[#0d0d0d]">Suivi de mes paiements</h1>
+        <p className="text-sm text-gray-500">Retrouvez l'état de tous vos paiements</p>
+      </div>
 
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-gray-400 mb-10"
-        >
-          Consultez l'état de vos cotisations en temps réel.
-        </motion.p>
-
-        {/* RESUME */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
-          {[
-            { label: 'Total cotisations', valeur: total, color: '#ff7200' },
-            { label: 'Payées', valeur: payees, color: '#22c55e' },
-            { label: 'En attente / retard', valeur: total - payees, color: '#ef4444' },
-          ].map((item, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: i * 0.15 }}
-              className="bg-[#111111] rounded-2xl p-6 border border-gray-800"
-            >
-              <p className="text-gray-400 text-sm mb-1">{item.label}</p>
-              <p className="text-3xl font-extrabold" style={{ color: item.color }}>
-                {item.valeur}
-              </p>
-            </motion.div>
-          ))}
+      {/* Stats */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
+        <div className="bg-white rounded-xl border border-gray-100 shadow-sm px-4 py-4">
+          <p className="text-gray-400 text-xs uppercase mb-1">Total versé</p>
+          <p className="text-[#0d0d0d] text-lg font-bold">{stats.totalVerse.toLocaleString('fr-FR')} F</p>
         </div>
+        <div className="bg-white rounded-xl border border-green-100 shadow-sm px-4 py-4">
+          <p className="text-green-500 text-xs uppercase mb-1">Validés</p>
+          <p className="text-green-600 text-lg font-bold">{stats.valides}</p>
+        </div>
+        <div className="bg-white rounded-xl border border-yellow-100 shadow-sm px-4 py-4">
+          <p className="text-yellow-500 text-xs uppercase mb-1">En attente</p>
+          <p className="text-yellow-600 text-lg font-bold">{stats.enAttente}</p>
+        </div>
+        <div className="bg-white rounded-xl border border-red-100 shadow-sm px-4 py-4">
+          <p className="text-red-400 text-xs uppercase mb-1">Rejetés</p>
+          <p className="text-red-500 text-lg font-bold">{stats.rejetes}</p>
+        </div>
+      </div>
 
-        {/* TABLEAU */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="bg-[#111111] rounded-2xl border border-gray-800 overflow-hidden"
-        >
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-gray-800">
-                <th className="text-left text-gray-400 px-6 py-4 font-medium">Période</th>
-                <th className="text-left text-gray-400 px-6 py-4 font-medium">Montant</th>
-                <th className="text-left text-gray-400 px-6 py-4 font-medium">Date paiement</th>
-                <th className="text-left text-gray-400 px-6 py-4 font-medium">Statut</th>
-              </tr>
-            </thead>
-            <tbody>
-              {cotisations.map((c, i) => {
-                const style = getStatutStyle(c.statut);
-                return (
-                  <motion.tr
-                    key={i}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.4, delay: 0.5 + i * 0.1 }}
-                    className="border-b border-gray-800 hover:bg-[#1a1a1a] transition"
-                  >
-                    <td className="px-6 py-4 text-white">{c.mois}</td>
-                    <td className="px-6 py-4 text-white">{c.montant.toLocaleString()} FCFA</td>
-                    <td className="px-6 py-4 text-gray-400">{c.date}</td>
-                    <td className="px-6 py-4">
-                      <span
-                        className="flex items-center gap-2 font-semibold"
-                        style={{ color: style.color }}
-                      >
-                        {style.icon}
-                        {c.statut}
-                      </span>
-                    </td>
-                  </motion.tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </motion.div>
+      {/* Filtres */}
+      <div className="flex gap-2 mb-4 flex-wrap">
+        {FILTRES.map(s => (
+          <button
+            key={s}
+            onClick={() => setFiltre(s)}
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
+              filtre === s ? 'bg-[#0d0d0d] text-white' : 'bg-white text-gray-500 border border-gray-200 hover:bg-gray-50'
+            }`}
+          >
+            {FILTRE_LABELS[s]}
+          </button>
+        ))}
+      </div>
+
+      {/* Liste */}
+      <div className="flex flex-col gap-3">
+        {loading ? (
+          <div className="bg-white rounded-xl p-8 text-center text-gray-400">Chargement...</div>
+        ) : paiementsFiltres.length === 0 ? (
+          <div className="bg-white rounded-xl p-8 text-center text-gray-400">Aucun paiement trouvé.</div>
+        ) : (
+          paiementsFiltres.map(p => (
+            <div key={p.idPaiement} className="bg-white rounded-xl border border-gray-100 shadow-sm px-5 py-4 flex items-center gap-4">
+              <StatutIcon statut={p.statut} />
+              <div className="flex-1 min-w-0">
+                <p className="text-[#0d0d0d] font-semibold text-sm truncate">{p.libelleCotisation}</p>
+                <div className="flex items-center gap-2 mt-0.5 text-xs text-gray-400">
+                  <span>{p.method}</span>
+                  <span>•</span>
+                  <span>{formatDateFr(p.datePaiement)}</span>
+                </div>
+              </div>
+              <div className="flex flex-col items-end gap-1 shrink-0">
+                <p className="text-[#ff7200] font-bold text-sm">{p.montant.toLocaleString('fr-FR')} FCFA</p>
+                <StatutBadge statut={p.statut} />
+              </div>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );
 }
-
-export default SuivisStatus;

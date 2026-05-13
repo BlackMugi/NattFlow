@@ -1,42 +1,23 @@
-import { useState } from 'react';
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
 import Logo from '../assets/img/Logo.png';
 import Epargne from '../assets/img/Eparngne 1.png';
-import { login } from '../services/authService';
-import { getDashboardPath } from '../utils/routeUtils';
+import { useLoginForm } from '../hooks/useLoginForm';
 
 function LoginPage() {
-  const [showPassword, setShowPassword] = useState(false);
-  const [email, setEmail]               = useState('');
-  const [password, setPassword]         = useState('');
-  const [error, setError]               = useState('');
-  const [loading, setLoading]           = useState(false);
-
-  const navigate = useNavigate();
-
-  const onSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-    setLoading(true);
-
-    try {
-      const user = await login(email, password);
-      navigate(getDashboardPath(user));  
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Une erreur inconnue est survenue');
-    } finally {
-      setLoading(false);
-    }
-  };
+  const {
+    email, setEmail,
+    password, setPassword,
+    showPassword, setShowPassword,
+    error, loading, onSubmit,
+  } = useLoginForm();
 
   return (
     <div className="h-screen flex items-center justify-center bg-white">
       <div className="flex shadow-[4px_4px_4px_rgba(0,0,0,0.25)] rounded-xl overflow-hidden w-[90vw] max-w-225">
 
-        {/* Partie formulaire */}
+        {/* Formulaire */}
         <div className="bg-[#c4c4c4] flex flex-col p-6 sm:p-8 w-[50%] min-w-70 rounded-tl-xl rounded-bl-xl">
-          
+
           <div className="flex items-center mb-6">
             <img src={Logo} alt="Logo NattFlow" className="h-10" />
             <span className="font-['Poppins',sans-serif] text-[21px] font-extrabold text-white tracking-[-0.5px]">
@@ -103,7 +84,7 @@ function LoginPage() {
 
             <button
               type="submit"
-              disabled={loading}  
+              disabled={loading}
               className="w-full bg-[#ff7400] text-white py-2 rounded-lg hover:bg-[#be5500] transition disabled:opacity-50"
             >
               {loading ? 'Connexion...' : 'Se connecter'}
@@ -111,7 +92,7 @@ function LoginPage() {
           </form>
         </div>
 
-        {/* Partie image */}
+        {/* Illustration */}
         <div className="relative w-[50%] min-w-50 bg-[radial-gradient(50%_50%_at_50%_50%,rgba(255,116,0,0.6)_0%,rgba(255,116,0,0.85)_50%,#ff7400_100%)] flex items-center justify-center rounded-tr-xl rounded-br-xl overflow-hidden">
           <img src={Epargne} alt="illustration" className="max-w-87.5 object-contain" />
         </div>

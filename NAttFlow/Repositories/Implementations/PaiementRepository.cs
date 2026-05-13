@@ -8,24 +8,52 @@ namespace NattFlow.Repositories.Implementations
 {
     public class PaiementRepository(AppDbContext context) : IPaiementRepository
     {
-        public async Task<IEnumerable<Paiement>> GetAllAsync() =>
-            await context.Paiements
+        public async Task<(IEnumerable<Paiement> Items, int Total)> GetAllAsync(int page, int pageSize)
+        {
+            var query = context.Paiements
                 .Include(p => p.User)
                 .Include(p => p.Cotisation)
-                .AsNoTracking()
+                .AsNoTracking();
+            var total = await query.CountAsync();
+            var items = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
+            return (items, total);
+        }
 
-        public async Task<IEnumerable<Paiement>> GetByUserIdAsync(int idUser) =>
-            await context.Paiements
+        public async Task<(IEnumerable<Paiement> Items, int Total)> GetByUserIdAsync(int idUser, int page, int pageSize)
+        {
+            var query = context.Paiements
                 .Include(p => p.Cotisation)
                 .Where(p => p.IdUser == idUser)
-                .AsNoTracking()
+                .AsNoTracking();
+            var total = await query.CountAsync();
+            var items = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
+            return (items, total);
+        }
 
-        public async Task<IEnumerable<Paiement>> GetByCotisationIdAsync(int idCotisation) =>
-            await context.Paiements
+        public async Task<(IEnumerable<Paiement> Items, int Total)> GetByCotisationIdAsync(int idCotisation, int page, int pageSize)
+        {
+            var query = context.Paiements
                 .Include(p => p.User)
                 .Where(p => p.IdCotisation == idCotisation)
+                .AsNoTracking();
+            var total = await query.CountAsync();
+            var items = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+            return (items, total);
+        }
+
+        // Sans pagination — utilisé par InitierAsync pour vérifier les doublons
+        public async Task<IEnumerable<Paiement>> GetByUserIdRawAsync(int idUser) =>
+            await context.Paiements
+                .Where(p => p.IdUser == idUser)
                 .AsNoTracking()
                 .ToListAsync();
 
